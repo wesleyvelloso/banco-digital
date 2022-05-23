@@ -1,4 +1,6 @@
 import lombok.Data;
+
+import javax.swing.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -8,36 +10,53 @@ public class Conta implements IConta{
 
     protected int agencia;
     protected int numero;
-    protected String tipo; // new
-    protected double saldo;
+    protected double saldo=0D;
     protected Cliente cliente;
     private LocalDateTime horaCriacao = LocalDateTime.now();
 
-    public Conta(Cliente cliente, String tipo) {
+    public Conta(Cliente cliente) {
         this.agencia = Conta.AGENCIA_PADRAO;
         this.numero = SEQUENCIAL++;
-        this.tipo = tipo;
         this.cliente = cliente;
 
         Banco.getInstance().getContas().add(this);
     }
 
-    public Conta(Cliente cliente, String tipo, Integer agencia) { // new - sobregarga
+    public Conta(Cliente cliente, Integer agencia) {
         this.agencia = agencia;
         this.numero = SEQUENCIAL++;
-        this.tipo = tipo;
         this.cliente = cliente;
+
         Banco.getInstance().getContas().add(this);
     }
 
     @Override
     public void sacar(double valor) {
-        saldo -= valor;
+        try {
+            if(this.saldo >= valor && valor>0) {
+                saldo -= valor;
+                JOptionPane.showMessageDialog(null,"Saque efetuado!  Novo Saldo: R$ "+this.saldo);
+            }
+            else if(valor<0){
+                throw new BancoExceptions("Valor de saque invalido!");
+            }else{
+                throw new BancoExceptions("Transacao invalida --> Saldo insuficiente!");
+            }
+        } catch (BancoExceptions e) {
+            JOptionPane.showMessageDialog(null,e.getMessage());
+        }
     }
 
     @Override
     public void depositar(double valor) {
-        saldo += valor;
+        try {
+            if(valor > 0)
+                saldo += valor;
+            else
+                throw new BancoExceptions("Valor de deposito invalido!");
+        }catch (BancoExceptions e){
+            JOptionPane.showMessageDialog(null,e.getMessage());
+        }
     }
 
     @Override
@@ -55,8 +74,8 @@ public class Conta implements IConta{
         System.out.println(String.format("Titular: %s", this.cliente.getNome()));
         System.out.println(String.format("Agencia: %d", this.agencia));
         System.out.println(String.format("Numero: %d", this.numero));
-        System.out.println(String.format("Saldo: %.2f", this.saldo));
-        System.out.println("Data da criacao: " + this.horaCriacao.format(Banco.getInstance().formatador));
+        System.out.println(String.format("Saldo: R$ %.2f", this.saldo));
+
 
     }
 }
