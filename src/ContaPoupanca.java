@@ -12,9 +12,10 @@ public class ContaPoupanca extends Conta {
         Double selicAtual = Banco.getInstance().getTaxaSelic() ;
 
         if(selicAtual > 8.5)
-            return this.saldo * 0.05;
-        else
             return this.saldo * (0.7 * selicAtual);
+        else
+            return this.saldo * 0.05;
+
     }
 
     @Override
