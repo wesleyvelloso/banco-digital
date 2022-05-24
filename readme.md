@@ -1,7 +1,7 @@
+## [Projeto base](https://github.com/falvojr/lab-banco-digital-oo) proposto pelo professor [Venilton](https://github.com/falvojr) da DIO
 
+### ***Modificações***:
 ### Nas classes Banco, Conta e Cliente foram adicionadas as anotações @Data da biblioteca Lombok, para redução de verbosidade.
-
-
 
 ### Criada a classe de exceções "BancoExceptions" que é invocada na ocorrência de exceções nas transações bancárias.
 
